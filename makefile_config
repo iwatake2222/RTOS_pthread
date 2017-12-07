@@ -1,0 +1,43 @@
+## environment
+#PLATFORM = WIN_MINGW
+PLATFORM = LINUX
+BINARY = DEBUG
+#BINARY = RELEASE
+
+
+ifeq ($(PLATFORM), WIN_MINGW)
+# for win
+MAKE = mingw32-make
+#DEL = del
+DEL = rm -f
+CC = g++
+AR = ar
+else
+# for linux
+MAKE = make
+DEL = rm -f
+CC = g++
+AR = ar
+endif
+
+ifeq ($(BINARY), DEBUG)
+CFLAGS = -g3 -O0 -Wall
+else
+CFLAGS = -O3 -Wall
+endif
+CFLAGS += -o $*.o	# create object file in the same directory as the source file
+
+ifeq ($(PLATFORM), WIN_MINGW)
+CFLAGS += -DIS_WINDOWS
+endif
+
+LDFLAGS =
+LIBS = -lm -lpthread
+
+OBJS = $(SRCS:.cpp=.o)
+#OBJS = *.o
+
+.c.o:
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<
+.cpp.o:
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<
